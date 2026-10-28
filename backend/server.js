@@ -6,6 +6,21 @@ require('dotenv').config();
 const bookRoutes = require('./src/routes/bookRoutes');
 
 const app = express();
+app.use(cors()); 
+app.use(express.json());
+
+// Cấu hình CORS thủ công cho phép mọi tên miền và mọi phương thức HTTP
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  // Xử lý riêng cho yêu cầu kiểm tra Preflight (OPTIONS)
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // Middleware
 app.use(cors());
